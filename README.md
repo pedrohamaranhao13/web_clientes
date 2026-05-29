@@ -15,7 +15,9 @@ Aplicacao web em Angular para cadastro de clientes. A tela atual possui uma barr
 - Navbar com identificacao do sistema e botao de saida.
 - Formulario de cadastro de cliente.
 - Campos para nome e CPF.
-- Envio dos dados para a API via requisicao `POST`.
+- Envio dos dados para a API via requisicao `POST` com corpo JSON.
+- Exibicao de mensagem de sucesso ou erro apos a resposta da API.
+- Limpeza automatica do formulario apos cadastro bem-sucedido.
 
 ## Estrutura principal
 
@@ -84,7 +86,7 @@ O cadastro envia uma requisicao para:
 POST http://localhost:8080/api/cliente/criar
 ```
 
-Os dados sao enviados como parametros da URL:
+Os dados sao enviados no corpo da requisicao em formato JSON:
 
 - `nome`
 - `cpf`
@@ -92,9 +94,22 @@ Os dados sao enviados como parametros da URL:
 Exemplo da chamada feita pelo componente:
 
 ```ts
-this.http.post('http://localhost:8080/api/cliente/criar', null, {
-  params,
+const request = {
+  nome: this.formulario.value.nome!,
+  cpf: this.formulario.value.cpf!
+};
+
+this.http.post('http://localhost:8080/api/cliente/criar', request, {
   responseType: 'text'
+})
+.subscribe({
+  next: (resposta) => {
+    alert(resposta);
+    this.formulario.reset();
+  },
+  error: (e) => {
+    alert('Erro: ' + e.error);
+  }
 });
 ```
 
@@ -112,7 +127,7 @@ Componente responsavel pela barra superior da aplicacao, usando classes do Boots
 
 ### CadastrarCliente
 
-Componente responsavel pelo formulario de cadastro. Utiliza `FormGroup`, `FormControl` e `HttpClient` para capturar e enviar os dados.
+Componente responsavel pelo formulario de cadastro. Utiliza `FormGroup`, `FormControl` e `HttpClient` para capturar os dados, montar o objeto da requisicao e enviar para a API. Em caso de sucesso, exibe a resposta da API e limpa o formulario. Em caso de erro, exibe a mensagem retornada pelo backend.
 
 ## Build
 

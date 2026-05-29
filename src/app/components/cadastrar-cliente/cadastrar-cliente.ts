@@ -22,13 +22,20 @@ export class CadastrarCliente {
 
   cadastrar() {
     
-    const params = new HttpParams()
-      .set('nome', this.formulario.value.nome!)
-      .set('cpf', this.formulario.value.cpf!)
+    const request = {
+      nome: this.formulario.value.nome!,
+      cpf: this.formulario.value.cpf!
+    }
 
-      this.http.post('http://localhost:8080/api/cliente/criar', null, { params: params, responseType: 'text' })
-        .subscribe((resposta) => {
-          console.log(resposta)
+      this.http.post('http://localhost:8080/api/cliente/criar', request, { responseType: 'text' })
+        .subscribe({
+          next : (resposta) => {
+            alert(resposta);
+            this.formulario.reset();
+          },
+          error: (e) => {
+            alert('Erro: ' + e.error);
+          }
         });
   }
 
