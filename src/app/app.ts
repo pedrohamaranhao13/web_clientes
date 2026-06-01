@@ -7,7 +7,7 @@ import { CadastrarCliente } from './components/cadastrar-cliente/cadastrar-clien
   selector: 'app-root',
   imports: [
     Navbar,
-    CadastrarCliente
+    RouterOutlet
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
